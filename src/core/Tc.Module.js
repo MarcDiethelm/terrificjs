@@ -33,6 +33,16 @@
             this.$ctx = $ctx;
 
             /**
+             * Contains the module context.
+             *
+             * @property $ctx
+             * @type jQuery
+             */
+            this.$$ = function(selector) {
+                return $ctx.find(selector);
+            };
+
+            /**
              * Contains the unique module ID.
              *
              * @property modId
@@ -127,7 +137,7 @@
                  * function after it has been run.
                  */
                 if (that.beforeBinding) {
-                    that.beforeBinding(function() {
+                    that.beforeBinding(that, that.$$, function() {
                         that.beforeBindingCallback();
                     });
                 }
@@ -165,7 +175,7 @@
             this.checkDependencies('onBinding',function() {
                 // Call the hook method bindEvents from the individual instance
                 if (that.onBinding) {
-                    that.onBinding();
+                    that.onBinding(that, that.$$);
                 }
 
                 // Decrement the dependency counter for the afterBinding phase
@@ -199,7 +209,7 @@
                      * instance
                      */
                     if (that.afterBinding) {
-                        that.afterBinding();
+                        that.afterBinding(that, that.$$);
                     }
                 });
             });
